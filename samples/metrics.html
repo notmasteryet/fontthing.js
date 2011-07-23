@@ -11,11 +11,15 @@ function run() {
   var data = xhr.responseText;
 
   var otf = new OTF(data);
-  document.getElementById("info").textContent = uneval(otf.metrics); 
+  document.getElementById("info").textContent = uneval({
+    metrics: otf.metrics,
+    horizontal: otf.glyphsHorizontalMetrics,
+    ABC: otf.getGlyphIds("ABC")
+  }); 
 }
 </script>
 </head>
 <body onload="run()">
 Font info:<br>
-<pre id="info"></pre>
+<div id="info"></div>
 </body>
