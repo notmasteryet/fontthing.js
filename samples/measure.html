@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../otf.js"></script>
+<script>
+
+function measure(otf, size, textDiv, outDiv) {
+  var text = textDiv.textContent;
+  var unitsPerEm = otf.metrics.unitsPerEm;
+  var glyphsMetrics = otf.glyphsHorizontalMetrics;
+  var sum = 0;
+  var ids = otf.getGlyphIds(text);
+  for (var i = 0; i < text.length; ++i) {
+    sum += glyphsMetrics[ids[i]].advanceWidth;
+  }
+  outDiv.setAttribute("style" , "width: " + (size * sum / unitsPerEm) + "px;");
+}
+
+function run() {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "simple.otf", false);
+  xhr.overrideMimeType("text/plain; charset=x-user-defined");
+  xhr.send();
+  var data = xhr.responseText;
+
+  var otf = new OTF(data);
+
+  measure(otf, 20, document.getElementById("t1"), document.getElementById("o1"));
+  measure(otf, 20, document.getElementById("t2"), document.getElementById("o2"));
+  measure(otf, 20, document.getElementById("t3"), document.getElementById("o3"));
+}
+</script>
+<style>
+@font-face { font-family: simple; src: url('simple.otf'); }
+div.in { font-family: simple; font-size: 20px; }
+div.out {background: blue; margin-bottom: 10px; width: 10px; height: 10px; }
+</style>
+</head>
+<body onload="run()">
+<div id="t1" class="in">AAAAAAAAA</div>
+<div id="o1" class="out"></div>
+<div id="t2" class="in">BBBBBBBBB</div>
+<div id="o2" class="out"></div>
+<div id="t3" class="in">ABAB</div>
+<div id="o3" class="out"></div>
+</body></html>
