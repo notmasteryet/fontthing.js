@@ -127,9 +127,7 @@
       var i, n = this.segments.length;
       for (i = 0; i < n; ++i) {
         var segment = this.segments[i];
-        if (code > segment.end)
-          break;
-        if (code < segment.start)
+        if (code < segment.start || segment.end < code)
           continue;
         // segment found
         if (segment.glyphIds)
